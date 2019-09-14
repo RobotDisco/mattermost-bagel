@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mattermost/mattermost-server/model"
+	"github.com/RobotDisco/mattermost-bagel/mattermost"
 )
 
 func main() {
@@ -16,27 +16,36 @@ func main() {
 	teamName := os.Getenv("BAGEL_TEAM_NAME")
 	channelName := os.Getenv("BAGEL_CHANNEL_NAME")
 
-	api := model.NewAPIv4Client(serverURL)
-	api.Login(botUserName, botPassword)
-	team, resp := api.GetTeamByName(teamName, "")
-	if resp.Error != nil {
-		fmt.Fprintf(os.Stderr, "Error: %+v", resp)
-		os.Exit(1)
-	}
-	//fmt.Printf("%+v\n", team)
+	api := mattermost.NewMatterMostClient(serverURL, botUserName, botPassword)
 
-	channel, resp := api.GetChannelByName(channelName, team.Id, "")
-	if resp.Error != nil {
-		fmt.Fprintf(os.Stderr, "Error: %+v", resp)
-		os.Exit(1)
-	}
-	//fmt.Printf("%+v\n", channel)
-
-	members, resp := api.GetChannelMembers(channel.Id, 0, 100, "")
-	if resp.Error != nil {
-		fmt.Fprintf(os.Stderr, "Error: %+v", resp)
-		os.Exit(1)
-	}
+	members := mattermost.GetChannelMembers(*api, teamName, channelName)
 	fmt.Printf("%+v\n", members)
 	fmt.Printf("There are %d members in channel %s for team %s\n", len(*members), channelName, teamName)
+
+	/* This is the result of the GetChannelMembers call
+	   [
+		   {
+				ChannelId:3j4bicr51f8x7coet4shng9kkr
+				UserId:3eizzrqatin3te8s3a3yj5r6xc
+				Roles:channel_user
+				LastViewedAt:1568235154897
+				MsgCount:42
+				MentionCount:0
+				NotifyProps: {
+					desktop:default
+					email:default
+					ignore_channel_mentions:default
+					mark_unread:all
+					push:default
+				}
+				LastUpdateAt:1568235154897
+				SchemeGuest:false
+				SchemeUser:true
+				SchemeAdmin:false
+				ExplicitRoles
+		   },
+	    ...
+	   ]
+
+	*/
 }
