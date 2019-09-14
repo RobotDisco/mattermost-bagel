@@ -21,31 +21,9 @@ func main() {
 	members := mattermost.GetChannelMembers(*api, teamName, channelName)
 	fmt.Printf("%+v\n", members)
 	fmt.Printf("There are %d members in channel %s for team %s\n", len(*members), channelName, teamName)
+	bot := mattermost.GetBotUser(*api)
+	pairs := mattermost.SplitIntoPairs(*members, bot.Id)
+	fmt.Printf("%+v\n", pairs)
 
-	/* This is the result of the GetChannelMembers call
-	   [
-		   {
-				ChannelId:3j4bicr51f8x7coet4shng9kkr
-				UserId:3eizzrqatin3te8s3a3yj5r6xc
-				Roles:channel_user
-				LastViewedAt:1568235154897
-				MsgCount:42
-				MentionCount:0
-				NotifyProps: {
-					desktop:default
-					email:default
-					ignore_channel_mentions:default
-					mark_unread:all
-					push:default
-				}
-				LastUpdateAt:1568235154897
-				SchemeGuest:false
-				SchemeUser:true
-				SchemeAdmin:false
-				ExplicitRoles
-		   },
-	    ...
-	   ]
-
-	*/
+	mattermost.MessageMembers(*api, pairs, bot)
 }

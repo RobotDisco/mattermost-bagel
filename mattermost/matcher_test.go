@@ -1,11 +1,13 @@
 package mattermost
 
 import (
+	"fmt"
 	"os"
 	"testing"
 )
 
 func TestNumberOfPairs(t *testing.T) {
+	fmt.Println("TestNumberOfPairs")
 	serverURL := os.Getenv("BAGEL_MATTERMOST_URL")
 
 	botUserName := os.Getenv("BAGEL_USERNAME")
@@ -17,10 +19,11 @@ func TestNumberOfPairs(t *testing.T) {
 	api := NewMatterMostClient(serverURL, botUserName, botPassword)
 
 	members := GetChannelMembers(*api, teamName, channelName)
+	bot := GetBotUser(*api)
 
-	memberCount := len(*members)
+	memberCount := len(*members) - 1
 
-	pairs := SplitIntoPairs(*members)
+	pairs := SplitIntoPairs(*members, bot.Id)
 	pairCount := len(pairs)
 	if pairCount != (memberCount / 2) {
 		t.Errorf("Expected %d; Actual %d\nMembers: %v\nPairs: %v\n", memberCount/2, pairCount, members, pairs)

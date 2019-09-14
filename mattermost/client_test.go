@@ -1,11 +1,13 @@
 package mattermost
 
 import (
+	"fmt"
 	"os"
 	"testing"
 )
 
 func TestNewMatterMostClient(t *testing.T) {
+	fmt.Println("TestNewMatterMostClient")
 	serverURL := os.Getenv("BAGEL_MATTERMOST_URL")
 	botUserName := os.Getenv("BAGEL_USERNAME")
 	botPassword := os.Getenv("BAGEL_PASSWORD")
@@ -22,4 +24,17 @@ func TestNewMatterMostClient(t *testing.T) {
 		t.Errorf("AuthType is empty for User: %v", botUserName)
 	}
 	*/
+}
+
+func TestGetBotUser(t *testing.T) {
+	fmt.Println("TestGetBotUser")
+	serverURL := os.Getenv("BAGEL_MATTERMOST_URL")
+	botUserName := os.Getenv("BAGEL_USERNAME")
+	botPassword := os.Getenv("BAGEL_PASSWORD")
+
+	api := NewMatterMostClient(serverURL, botUserName, botPassword)
+	botUser := GetBotUser(*api)
+	if botUser.Username != botUserName {
+		t.Errorf("Expected Bot: %v, got: %v", botUserName, botUser.Username)
+	}
 }
