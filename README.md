@@ -32,4 +32,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate.
 
 ## License
-TODO Choose a license
+This software is licensed under the [MIT](https://choosealicense.com/licenses/mit/) software license.
