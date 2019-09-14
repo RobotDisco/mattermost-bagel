@@ -29,9 +29,3 @@ func TestNumberOfPairs(t *testing.T) {
 		t.Errorf("Expected %d; Actual %d\nMembers: %v\nPairs: %v\n", memberCount/2, pairCount, members, pairs)
 	}
 }
-
-// TODO: Test bot user is filtered out
-// TODO: Are users different (based on history)?
-// TODO: Are users disabled?
-// TODO: Some kind of memory, have these users been matched recently?
-// TODO: What do we do with the odd person out? (Sorry you're not interesting, here's a haiku?)
