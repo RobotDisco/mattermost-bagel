@@ -18,23 +18,23 @@ func main() {
 
 	api := model.NewAPIv4Client(serverURL)
 	api.Login(botUserName, botPassword)
-	team, err := api.GetTeamByName(teamName, "")
-	if err.Error != nil {
-		fmt.Fprintf(os.Stderr, "Error: %+v", err)
+	team, resp := api.GetTeamByName(teamName, "")
+	if resp.Error != nil {
+		fmt.Fprintf(os.Stderr, "Error: %+v", resp)
 		os.Exit(1)
 	}
 	//fmt.Printf("%+v\n", team)
 
-	channel, err := api.GetChannelByName(channelName, team.Id, "")
-	if err.Error != nil {
-		fmt.Fprintf(os.Stderr, "Error: %+v", err)
+	channel, resp := api.GetChannelByName(channelName, team.Id, "")
+	if resp.Error != nil {
+		fmt.Fprintf(os.Stderr, "Error: %+v", resp)
 		os.Exit(1)
 	}
 	//fmt.Printf("%+v\n", channel)
 
-	members, err := api.GetChannelMembers(channel.Id, 0, 100, "")
-	if err.Error != nil {
-		fmt.Fprintf(os.Stderr, "Error: %+v", err)
+	members, resp := api.GetChannelMembers(channel.Id, 0, 100, "")
+	if resp.Error != nil {
+		fmt.Fprintf(os.Stderr, "Error: %+v", resp)
 		os.Exit(1)
 	}
 	fmt.Printf("%+v\n", members)
