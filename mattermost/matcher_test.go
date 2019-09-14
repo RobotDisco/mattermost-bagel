@@ -23,6 +23,6 @@ func TestNumberOfPairs(t *testing.T) {
 	pairs := SplitIntoPairs(*members)
 	pairCount := len(pairs)
 	if pairCount != (memberCount / 2) {
-		t.Error("ZOMG We did not split members into pairs properly")
+		t.Errorf("Expected %d; Actual %d\nMembers: %v\nPairs: %v\n", memberCount/2, pairCount, members, pairs)
 	}
 }
