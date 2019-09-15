@@ -1,4 +1,4 @@
-# Bagel (for Slack)
+# Bagel (for Mattermost)
 
 Bagel is a Mattermost tool that, given a channel, will randomly match the people in it into pairs and tell them to socialize over a coffee or something.
 ## Installation
