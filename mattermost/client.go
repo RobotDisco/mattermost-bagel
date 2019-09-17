@@ -7,6 +7,7 @@ import (
 	"github.com/mattermost/mattermost-server/model"
 )
 
+// ClientV4 is just mattermost's model.Client4
 type ClientV4 model.Client4
 
 // NewMatterMostClient returns a NewAPIV4Client after logging in with the provided username and password
@@ -18,8 +19,8 @@ func NewMatterMostClient(url string, username string, password string) *model.Cl
 	return api
 }
 
-// GetChannelMembers retrieves a list of members in a given channel for the specified teamName
-func GetChannelMembers(m model.Client4, teamName string, channelName string) *model.ChannelMembers {
+// GetActiveChannelMembers retrieves a list of active members in a given channel for the specified teamName
+func GetActiveChannelMembers(m model.Client4, teamName string, channelName string) model.UserSlice {
 	team, resp := m.GetTeamByName(teamName, "")
 	if resp.Error != nil {
 		fmt.Fprintf(os.Stderr, "Error: %+v", resp)
@@ -34,12 +35,14 @@ func GetChannelMembers(m model.Client4, teamName string, channelName string) *mo
 	}
 	//fmt.Printf("%+v\n", channel)
 
-	members, resp := m.GetChannelMembers(channel.Id, 0, 100, "")
+	members, resp := m.GetUsersInChannel(channel.Id, 0, 100, "")
 	if resp.Error != nil {
 		fmt.Fprintf(os.Stderr, "Error: %+v", resp)
 		os.Exit(1)
 	}
-	return members
+
+	slice := model.UserSlice(members)
+	return slice.FilterByActive(true)
 }
 
 /* GetChannelMembers call result
@@ -83,7 +86,7 @@ func GetBotUser(m model.Client4) *model.User {
 // MessageMembers sends a message via mattermost to each set of pairs
 func MessageMembers(m model.Client4, pairs ChannelMemberPairs, botUser *model.User) {
 	for _, p := range pairs {
-		uidList := []string{p.First.UserId, p.Second.UserId, botUser.Id}
+		uidList := []string{p.First.Id, p.Second.Id, botUser.Id}
 		channel, resp := m.CreateGroupChannel(uidList)
 
 		fmt.Printf("Channel: %v", channel)

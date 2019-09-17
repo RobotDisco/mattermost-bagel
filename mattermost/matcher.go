@@ -9,19 +9,19 @@ import (
 
 // ChannelMemberPair represents two channel members that have been grouped
 type ChannelMemberPair struct {
-	First  model.ChannelMember
-	Second model.ChannelMember
+	First  *model.User
+	Second *model.User
 }
 
 // ChannelMemberPairs represents a slice of ChannelMemberPair
 type ChannelMemberPairs []ChannelMemberPair
 
 // SplitIntoPairs splits the list of ChannelMembers into randomized list of pairs
-func SplitIntoPairs(channelMembers model.ChannelMembers, coffeeBotUserId string) ChannelMemberPairs {
+func SplitIntoPairs(channelMembers []*model.User, coffeeBotUserID string) ChannelMemberPairs {
 	// Remove coffee bot from our list of prospective matches
 	coffeeBotUserIndex := -1
 	for index, channelMember := range channelMembers {
-		if channelMember.UserId == coffeeBotUserId {
+		if channelMember.Id == coffeeBotUserID {
 			coffeeBotUserIndex = index
 			break
 		}

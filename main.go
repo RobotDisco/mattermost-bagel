@@ -18,12 +18,12 @@ func main() {
 
 	api := mattermost.NewMatterMostClient(serverURL, botUserName, botPassword)
 
-	members := mattermost.GetChannelMembers(*api, teamName, channelName)
+	members := mattermost.GetActiveChannelMembers(*api, teamName, channelName)
 	fmt.Printf("%+v\n", members)
-	fmt.Printf("There are %d members in channel %s for team %s\n", len(*members), channelName, teamName)
+	fmt.Printf("There are %d members in channel %s for team %s\n", len(members), channelName, teamName)
 	bot := mattermost.GetBotUser(*api)
-	pairs := mattermost.SplitIntoPairs(*members, bot.Id)
-	fmt.Printf("%+v\n", pairs)
+	pairs := mattermost.SplitIntoPairs(members, bot.Id)
+	fmt.Printf("%+v\n", pairs[0].First)
 
 	mattermost.MessageMembers(*api, pairs, bot)
 }

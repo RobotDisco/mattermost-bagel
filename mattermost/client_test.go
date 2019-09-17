@@ -38,3 +38,22 @@ func TestGetBotUser(t *testing.T) {
 		t.Errorf("Expected Bot: %v, got: %v", botUserName, botUser.Username)
 	}
 }
+
+func TestGetActiveChannelMembers(t *testing.T) {
+	fmt.Println("TestGetActiveChannelMembers")
+	serverURL := os.Getenv("BAGEL_MATTERMOST_URL")
+	botUserName := os.Getenv("BAGEL_USERNAME")
+	botPassword := os.Getenv("BAGEL_PASSWORD")
+
+	teamName := os.Getenv("BAGEL_TEAM_NAME")
+	channelName := os.Getenv("BAGEL_CHANNEL_NAME")
+
+	api := NewMatterMostClient(serverURL, botUserName, botPassword)
+	members := GetActiveChannelMembers(*api, teamName, channelName)
+
+	for _, m := range members {
+		if m.DeleteAt != 0 {
+			t.Errorf("Expected to not find deactivated user %s.", m.Username)
+		}
+	}
+}
