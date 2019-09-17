@@ -17,7 +17,7 @@ type ChannelMemberPair struct {
 type ChannelMemberPairs []ChannelMemberPair
 
 // SplitIntoPairs splits the list of ChannelMembers into randomized list of pairs
-func SplitIntoPairs(channelMembers []*model.User, coffeeBotUserID string) ChannelMemberPairs {
+func SplitIntoPairs(channelMembers model.UserSlice, coffeeBotUserID string) ChannelMemberPairs {
 	// Remove coffee bot from our list of prospective matches
 	coffeeBotUserIndex := -1
 	for index, channelMember := range channelMembers {
