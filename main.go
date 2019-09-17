@@ -23,7 +23,6 @@ func main() {
 	fmt.Printf("There are %d members in channel %s for team %s\n", len(members), channelName, teamName)
 	bot := mattermost.GetBotUser(*api)
 	pairs := mattermost.SplitIntoPairs(members, bot.Id)
-	fmt.Printf("%+v\n", pairs[0].First)
 
 	mattermost.MessageMembers(*api, pairs, bot)
 }
