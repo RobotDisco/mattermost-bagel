@@ -1,6 +1,7 @@
 package mattermost
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 
@@ -9,15 +10,24 @@ import (
 
 // ChannelMemberPair represents two channel members that have been grouped
 type ChannelMemberPair struct {
-	First  *model.User
-	Second *model.User
+	ChannelID string
+	First     *model.User
+	Second    *model.User
 }
 
 // ChannelMemberPairs represents a slice of ChannelMemberPair
 type ChannelMemberPairs []ChannelMemberPair
 
+// Identifier is a concatnated, alphabetical string of the two Ids of the pairs
+func (pair ChannelMemberPair) Identifier() string {
+	if pair.First.Id < pair.Second.Id {
+		return pair.First.Id + ":" + pair.Second.Id
+	}
+	return pair.Second.Id + ":" + pair.First.Id
+}
+
 // SplitIntoPairs splits the list of ChannelMembers into randomized list of pairs
-func SplitIntoPairs(channelMembers model.UserSlice, coffeeBotUserID string) ChannelMemberPairs {
+func SplitIntoPairs(channelID string, channelMembers model.UserSlice, coffeeBotUserID string) ChannelMemberPairs {
 	// Remove coffee bot from our list of prospective matches
 	coffeeBotUserIndex := -1
 	for index, channelMember := range channelMembers {
@@ -48,8 +58,44 @@ func SplitIntoPairs(channelMembers model.UserSlice, coffeeBotUserID string) Chan
 		firstMember := channelMembers[i]
 		secondMember := channelMembers[memberLength-i-1]
 
-		pair := ChannelMemberPair{firstMember, secondMember}
+		pair := ChannelMemberPair{channelID, firstMember, secondMember}
 		pairs[i] = pair
 	}
 	return pairs
+}
+
+// RetryPairs ... TODO: (TL) documentation
+func RetryPairs(pairs ChannelMemberPairs) ChannelMemberPairs {
+	// our bot will already be sliced out, so we don't need to remove one
+	pairLength := len(pairs)
+	halfPairLength := pairLength / 2
+
+	newPairs := make(ChannelMemberPairs, halfPairLength+1) // Allow for odd pair lengths
+	if halfPairLength < 1 {
+		fmt.Println("Not enough pairs to re-match, aborting.")
+		return pairs
+	}
+
+	for i := 0; i < halfPairLength; i++ {
+		firstPair := pairs[i]
+		secondPair := pairs[pairLength-i-1]
+
+		// TODO: (TL) If a list of pairs is does not have a heterogenous mix
+		//            of channels, you will be driving for your meetup ...
+		newPairs[i] = ChannelMemberPair{
+			firstPair.ChannelID,
+			firstPair.First,
+			secondPair.Second,
+		}
+		newPairs[pairLength-i-1] = ChannelMemberPair{
+			secondPair.ChannelID,
+			secondPair.First,
+			firstPair.Second,
+		}
+	}
+	// In an uneven scenario, the middle element is left out
+	if pairLength%2 != 0 {
+		newPairs[halfPairLength] = pairs[halfPairLength]
+	}
+	return newPairs
 }

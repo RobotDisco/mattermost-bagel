@@ -13,6 +13,10 @@
 
 # Files containing credeentials
 envs.sh
+env.sh
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# DB Files
+*.db
