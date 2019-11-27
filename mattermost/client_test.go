@@ -49,7 +49,7 @@ func TestGetActiveChannelMembers(t *testing.T) {
 	channelName := os.Getenv("BAGEL_CHANNEL_NAME")
 
 	api := NewMatterMostClient(serverURL, botUserName, botPassword)
-	members := GetActiveChannelMembers(*api, teamName, channelName)
+	_, members := GetActiveChannelMembers(*api, teamName, channelName)
 
 	for _, m := range members {
 		if m.DeleteAt != 0 {
