@@ -10,7 +10,7 @@ import (
 // used to configure the persistence portion of Bagel
 //
 // Expected environment variables:
-// - BAGEL_PERSISTENCE_METHOD (Options: "none", "sqlite")
+// - BAGEL_DB_BACKEND (Options: "none", "sqlite")
 // - BAGEL_PERSISTENCE_RETRY_COUNT (Defaults to 0 for "none", 1 for everything else)
 //
 // SQLite Only

@@ -18,7 +18,7 @@ const (
 
 // CreatePersistenceConfig ... TODO: (TL) Comment
 func CreatePersistenceConfig() PersistenceConfig {
-	if strings.ToLower(os.Getenv("BAGEL_PERSISTENCE_METHOD")) != "sqlite" {
+	if strings.ToLower(os.Getenv("BAGEL_DB_BACKEND")) != "sqlite" {
 		return PersistenceConfig{}
 	}
 
@@ -26,7 +26,7 @@ func CreatePersistenceConfig() PersistenceConfig {
 	sqliteFile := os.Getenv("BAGEL_SQLITE_FILE")
 	if sqliteFile == "" {
 		// TODO: (TL) Fall back to a DB name?
-		fmt.Printf("'BAGEL_PERSISTENCE_METHOD' of 'sqlite' specified, but 'BAGEL_SQLITE_FILE' is not specified.\nFalling back to no persistence model.\n")
+		fmt.Printf("'BAGEL_DB_BACKEND' of 'sqlite' specified, but 'BAGEL_SQLITE_FILE' is not specified.\nFalling back to no persistence model.\n")
 		return PersistenceConfig{}
 	}
 
