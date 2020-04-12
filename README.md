@@ -18,7 +18,7 @@ export BAGEL_CHANNEL_NAME="<the name of some mattermost channel under that team>
 export BAGEL_DB_BACKEND="<'none' to not track pairing history in a database, 'sqlite' to store pairing history in a SQLite file.>"
 export BAGEL_PERSISTENCE_RETRY_COUNT=<number of times to retry generating matches if we detect a conversation pair that was the same as from the last time this program was run>
 
-export BAGEL_SQLITE_FILE="<the name of the file (including path) where you would like to create and load a SQLite database if configured to do so.>"
+export BAGEL_DB_SQLITE_FILE="<the name of the file (including path) where you would like to create and load a SQLite database if configured to do so.>"
 export BAGEL_SQLITE_STALE_BOUNDARY="<'N days', where N is an integer. This tells us the number of days in the past to check for previous matches between our newly generated pairs in order to not repeat them.>"
 ```
 2. source that file ... in BASH or SH or ZSH this is `source env.sh` for example.

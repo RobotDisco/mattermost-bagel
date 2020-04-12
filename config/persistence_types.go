@@ -14,7 +14,7 @@ import (
 // - BAGEL_PERSISTENCE_RETRY_COUNT (Defaults to 0 for "none", 1 for everything else)
 //
 // SQLite Only
-// - BAGEL_SQLITE_FILE (Local path to the file)
+// - BAGEL_DB_SQLITE_FILE (Local path to the file)
 type PersistenceConfig struct {
 	PersistenceType PersistenceMethod
 	RetryCount      int

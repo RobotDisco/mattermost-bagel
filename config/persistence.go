@@ -23,10 +23,10 @@ func CreatePersistenceConfig() PersistenceConfig {
 	}
 
 	// SQLite DB File
-	sqliteFile := os.Getenv("BAGEL_SQLITE_FILE")
+	sqliteFile := os.Getenv("BAGEL_DB_SQLITE_FILE")
 	if sqliteFile == "" {
 		// TODO: (TL) Fall back to a DB name?
-		fmt.Printf("'BAGEL_DB_BACKEND' of 'sqlite' specified, but 'BAGEL_SQLITE_FILE' is not specified.\nFalling back to no persistence model.\n")
+		fmt.Printf("'BAGEL_DB_BACKEND' of 'sqlite' specified, but 'BAGEL_DB_SQLITE_FILE' is not specified.\nFalling back to no persistence model.\n")
 		return PersistenceConfig{}
 	}
 
