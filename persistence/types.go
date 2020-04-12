@@ -1,4 +1,5 @@
-package config
+package persistence
+
 
 import (
 	"os"

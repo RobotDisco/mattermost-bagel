@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/RobotDisco/mattermost-bagel/config"
+	"github.com/RobotDisco/mattermost-bagel/persistence"
 	"github.com/RobotDisco/mattermost-bagel/mattermost"
 	"github.com/mattermost/mattermost-server/model"
 )
@@ -16,12 +16,12 @@ const (
 )
 
 func main() {
-	bagelConfig := config.CreateBagelConfig()
-	persistenceConfig := config.CreatePersistenceConfig()
+	bagelConfig := persistence.CreateBagelConfig()
+	persistenceConfig := persistence.CreatePersistenceConfig()
 	matchAndSchedulePairs(bagelConfig, persistenceConfig)
 }
 
-func matchAndSchedulePairs(bagelConfig config.BagelConfig, persistenceConfig config.PersistenceConfig) {
+func matchAndSchedulePairs(bagelConfig persistence.BagelConfig, persistenceConfig persistence.PersistenceConfig) {
 	api := mattermost.NewMatterMostClient(bagelConfig.ServerURL, bagelConfig.BotUserName, bagelConfig.BotPassword)
 
 	channelID, members := mattermost.GetActiveChannelMembers(*api, bagelConfig.TeamName, bagelConfig.ChannelName)
@@ -58,7 +58,7 @@ func matchAndSchedulePairs(bagelConfig config.BagelConfig, persistenceConfig con
 	retryScheduling(api, bot, persistenceConfig, verifyResult.Failures)
 }
 
-func retryScheduling(api *model.Client4, bot *model.User, persistenceConfig config.PersistenceConfig, failedPairs mattermost.ChannelMemberPairs) {
+func retryScheduling(api *model.Client4, bot *model.User, persistenceConfig persistence.PersistenceConfig, failedPairs mattermost.ChannelMemberPairs) {
 	persistenceConfig.RetryCount--
 	retryPairs := mattermost.RetryPairs(failedPairs)
 	retryVerifyResult := persistenceConfig.VerifyPairs(retryPairs)

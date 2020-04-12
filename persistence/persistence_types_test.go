@@ -1,15 +1,15 @@
-package config_test
+package persistence_test
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/RobotDisco/mattermost-bagel/config"
+	"github.com/RobotDisco/mattermost-bagel/persistence"
 )
 
 func TestSQLitePersistenceConfig(t *testing.T) {
 	fmt.Println("TestSQLitePersistenceConfig") // TODO: (TL) Doesn't find environment variables
-	config.CreatePersistenceConfig()
+	persistence.CreatePersistenceConfig()
 	// TODO: (GCD) Write tests to cover both 'none' and 'sqlite' test cases.
 	// TODO: (TL) Test DB with a test database file
 }
