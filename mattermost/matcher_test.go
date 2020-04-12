@@ -2,23 +2,23 @@ package mattermost
 
 import (
 	"fmt"
-	"os"
 	"testing"
+	"github.com/RobotDisco/mattermost-bagel/config"
 )
 
 func TestNumberOfPairs(t *testing.T) {
+	cfg := config.Config{
+		MattermostURL: "http://localhost:8065",
+		MattermostUser: "coffeebot1",
+		MattermostPassword: "password",
+		MattermostTeam: "test",
+		MattermostChannel: "coffeebot",
+	}
+	
 	fmt.Println("TestNumberOfPairs")
-	serverURL := os.Getenv("BAGEL_MATTERMOST_URL")
+	api := NewMatterMostClient(cfg.MattermostURL, cfg.MattermostUser, cfg.MattermostPassword)
 
-	botUserName := os.Getenv("BAGEL_USERNAME")
-	botPassword := os.Getenv("BAGEL_PASSWORD")
-
-	teamName := os.Getenv("BAGEL_TEAM_NAME")
-	channelName := os.Getenv("BAGEL_CHANNEL_NAME")
-
-	api := NewMatterMostClient(serverURL, botUserName, botPassword)
-
-	channelID, members := GetActiveChannelMembers(*api, teamName, channelName)
+	channelID, members := GetActiveChannelMembers(*api, cfg.MattermostTeam, cfg.MattermostChannel)
 	bot := GetBotUser(*api)
 
 	memberCount := len(members) - 1

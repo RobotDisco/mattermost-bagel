@@ -2,19 +2,25 @@ package mattermost
 
 import (
 	"fmt"
-	"os"
 	"testing"
+
+	"github.com/RobotDisco/mattermost-bagel/config"
 )
+
+var cfg = config.Config{
+ 	MattermostURL: "http://localhost:8065",
+ 	MattermostUser: "coffeebot1",
+ 	MattermostPassword: "password",
+ 	MattermostTeam: "test",
+ 	MattermostChannel: "coffeebot",
+}
 
 func TestNewMatterMostClient(t *testing.T) {
 	fmt.Println("TestNewMatterMostClient")
-	serverURL := os.Getenv("BAGEL_MATTERMOST_URL")
-	botUserName := os.Getenv("BAGEL_USERNAME")
-	botPassword := os.Getenv("BAGEL_PASSWORD")
 
-	api := NewMatterMostClient(serverURL, botUserName, botPassword)
-	if api.Url != serverURL {
-		t.Errorf("Unable to set the correct serverURL, expected: %v, got: %v", serverURL, api.Url)
+	api := NewMatterMostClient(cfg.MattermostURL, cfg.MattermostUser, cfg.MattermostPassword)
+	if api.Url != cfg.MattermostURL {
+		t.Errorf("Unable to set the correct serverURL, expected: %v, got: %v", cfg.MattermostURL, api.Url)
 	}
 	/* Not working? Login doesn't seem to happen
 	if api.AuthToken == "" {
@@ -28,28 +34,19 @@ func TestNewMatterMostClient(t *testing.T) {
 
 func TestGetBotUser(t *testing.T) {
 	fmt.Println("TestGetBotUser")
-	serverURL := os.Getenv("BAGEL_MATTERMOST_URL")
-	botUserName := os.Getenv("BAGEL_USERNAME")
-	botPassword := os.Getenv("BAGEL_PASSWORD")
 
-	api := NewMatterMostClient(serverURL, botUserName, botPassword)
+	api := NewMatterMostClient(cfg.MattermostURL, cfg.MattermostUser, cfg.MattermostPassword)
 	botUser := GetBotUser(*api)
-	if botUser.Username != botUserName {
-		t.Errorf("Expected Bot: %v, got: %v", botUserName, botUser.Username)
+	if botUser.Username != cfg.MattermostUser {
+		t.Errorf("Expected Bot: %v, got: %v", cfg.MattermostUser, botUser.Username)
 	}
 }
 
 func TestGetActiveChannelMembers(t *testing.T) {
 	fmt.Println("TestGetActiveChannelMembers")
-	serverURL := os.Getenv("BAGEL_MATTERMOST_URL")
-	botUserName := os.Getenv("BAGEL_USERNAME")
-	botPassword := os.Getenv("BAGEL_PASSWORD")
 
-	teamName := os.Getenv("BAGEL_TEAM_NAME")
-	channelName := os.Getenv("BAGEL_CHANNEL_NAME")
-
-	api := NewMatterMostClient(serverURL, botUserName, botPassword)
-	_, members := GetActiveChannelMembers(*api, teamName, channelName)
+	api := NewMatterMostClient(cfg.MattermostURL, cfg.MattermostUser, cfg.MattermostPassword)
+	_, members := GetActiveChannelMembers(*api, cfg.MattermostTeam, cfg.MattermostChannel)
 
 	for _, m := range members {
 		if m.DeleteAt != 0 {
