@@ -6,6 +6,7 @@ import (
 	"github.com/RobotDisco/mattermost-bagel/persistence"
 	"github.com/RobotDisco/mattermost-bagel/mattermost"
 	"github.com/mattermost/mattermost-server/model"
+	"github.com/RobotDisco/mattermost-bagel/config"
 )
 
 const (
@@ -16,16 +17,16 @@ const (
 )
 
 func main() {
-	bagelConfig := persistence.CreateBagelConfig()
+	bagelConfig := config.CreateConfigFromEnvironmentVariables()
 	persistenceConfig := persistence.CreatePersistenceConfig()
 	matchAndSchedulePairs(bagelConfig, persistenceConfig)
 }
 
-func matchAndSchedulePairs(bagelConfig persistence.BagelConfig, persistenceConfig persistence.PersistenceConfig) {
-	api := mattermost.NewMatterMostClient(bagelConfig.ServerURL, bagelConfig.BotUserName, bagelConfig.BotPassword)
+func matchAndSchedulePairs(bagelConfig config.Config, persistenceConfig persistence.PersistenceConfig) {
+	api := mattermost.NewMatterMostClient(bagelConfig.MattermostURL, bagelConfig.MattermostUser, bagelConfig.MattermostPassword)
 
-	channelID, members := mattermost.GetActiveChannelMembers(*api, bagelConfig.TeamName, bagelConfig.ChannelName)
-	fmt.Printf("There are %d members in channel %s for team %s\n", len(members), bagelConfig.ChannelName, bagelConfig.TeamName)
+	channelID, members := mattermost.GetActiveChannelMembers(*api, bagelConfig.MattermostTeam, bagelConfig.MattermostChannel)
+	fmt.Printf("There are %d members in channel %s for team %s\n", len(members), bagelConfig.MattermostChannel, bagelConfig.MattermostTeam)
 	bot := mattermost.GetBotUser(*api)
 	pairs := mattermost.SplitIntoPairs(channelID, members, bot.Id)
 	fmt.Printf("Created %d pair(s)\n", len(pairs))
