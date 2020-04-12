@@ -64,7 +64,7 @@ func CreatePersistenceConfig() PersistenceConfig {
 	selectMeetupsStatement := fmt.Sprintf("SELECT COUNT(1) FROM scheduled_outings WHERE message_date > datetime('now', '-%s') AND pairing = ?", timeframe)
 
 	retryCount := 1
-	retryEnvironmentVar := os.Getenv("BAGEL_PERSISTENCE_RETRY_COUNT")
+	retryEnvironmentVar := os.Getenv("BAGEL_NONREPEATING_PAIRS_MAX_RETRY_ATTEMPTS")
 	if retryEnvironmentVar != "" {
 		retryCount, _ = strconv.Atoi(retryEnvironmentVar)
 	}

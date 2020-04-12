@@ -11,7 +11,7 @@ import (
 //
 // Expected environment variables:
 // - BAGEL_DB_BACKEND (Options: "none", "sqlite")
-// - BAGEL_PERSISTENCE_RETRY_COUNT (Defaults to 0 for "none", 1 for everything else)
+// - BAGEL_NONREPEATING_PAIRS_MAX_RETRY_ATTEMPTS (Defaults to 0 for "none", 1 for everything else)
 //
 // SQLite Only
 // - BAGEL_DB_SQLITE_FILE (Local path to the file)
