@@ -73,24 +73,23 @@ if __name__ == "__main__":
 
     users = [users[i:i + 2] for i in range(0, len(users), 2)]
 
-    if not os.getenv("ROBONONA_DRY_RUN") or os.getenv("ROBONONA_DRY_RUN") != "0":
+    if not os.getenv("ROBONONA_DRY_RUN") or os.getenv("ROBONONA_DRY_RUN") == "0":
         for pair in users:
-            for pair in users:
-                channel_id = mattermost.channels.create_group_channel(
-                    pair[0][0],
-                    pair[1][0]
-                ])
-                mattermost.posts.create_post(
-                    channel_id,
-                    MATCHED_MSG
-                )
+            channel_id = mattermost.channels.create_group_channel(
+                pair[0][0],
+                pair[1][0]
+            ])['id']
+            mattermost.posts.create_post(options = {
+                'channel_id': channel_id,
+                'message': MATCHED_MSG
+            ))
 
         if unmatched_user:
-            channel_id = mattermost.channels.create_direct([user])
-            mattermost.posts.create_post(
-                channel_id,
-                UNMATCHED_MSG
-            )
+            channel_id = mattermost.channels.create_direct([user])['id']
+            mattermost.posts.create_post(options = {
+                'channel_id': channel_id,
+                'message': UNMATCHED_MSG
+            ))
 
     response = {
         'date': datetime.datetime.now().isoformat(),
